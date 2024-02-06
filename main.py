@@ -12,12 +12,12 @@ SCREEN_SIZE = [600, 450]
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.z = 1
+        self.image = QLabel(self)
         self.getImage()
         self.initUI()
-        self.z = 1
 
     def getImage(self):
-        self.z = 5
         params = {
             "z": str(self.z),
             "ll": '37.530887,55.703118',
@@ -43,7 +43,6 @@ class Example(QMainWindow):
 
         ## Изображение
         self.pixmap = QPixmap(self.map_file)
-        self.image = QLabel(self)
         self.image.move(0, 0)
         self.image.resize(600, 450)
         self.image.setPixmap(self.pixmap)
@@ -53,10 +52,16 @@ class Example(QMainWindow):
         os.remove(self.map_file)
 
     def keyPressEvent(self, event):
-        if event.key() == Qt.Key_PageUp:
-            self.z -= 1
+        if event.key() == Qt.Key_PageDown:
+            if self.z - 1 >= 0:
+                self.z -= 1
+                self.getImage()
+                self.initUI()
         elif event.key() == Qt.Key_PageUp:
-            self.z += 1
+            if self.z + 1 <= 21:
+                self.z += 1
+                self.getImage()
+                self.initUI()
 
 
 if __name__ == '__main__':
